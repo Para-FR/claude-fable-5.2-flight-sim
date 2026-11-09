@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aérosphère — simulateur de vol planétaire</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+</head>
+<body>
+  <canvas id="view" tabindex="0"></canvas>
+
+  <div id="fps">-- FPS</div>
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <div id="top">
+      <canvas id="hdgtape"></canvas>
+      <div id="hdg" class="box">000°</div>
+    </div>
+
+    <div id="left" class="panel">
+      <div class="lbl">VITESSE</div>
+      <div class="big"><span id="spd">0</span><small>kt</small></div>
+      <div class="row"><span class="lbl">FACTEUR G</span><span id="gload">1.0</span></div>
+      <div class="thr">
+        <div class="thrtrack"><div id="thrbar"></div></div>
+        <div>
+          <div class="lbl">POUSSÉE</div>
+          <div id="thr" class="mid">0 %</div>
+          <div id="boost" class="tag hidden">POST-COMB.</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="right" class="panel">
+      <div class="lbl">ALTITUDE</div>
+      <div class="big"><span id="alt">0</span><small>ft</small></div>
+      <div class="row"><span class="lbl">SOIT</span><span id="altkm">0 m</span></div>
+      <div class="row"><span class="lbl">SOL</span><span><span id="agl">0</span> ft</span></div>
+      <div class="lbl" style="margin-top:10px">VARIOMÈTRE</div>
+      <div class="mid"><span id="vs">0</span><small> ft/min</small></div>
+    </div>
+
+    <div id="warn" class="hidden">DÉCROCHAGE</div>
+
+    <div id="bottom">
+      <canvas id="horizon"></canvas>
+    </div>
+
+    <div id="posbox" class="panel">
+      <div class="row"><span class="lbl">LAT</span><span id="lat">0</span></div>
+      <div class="row"><span class="lbl">LON</span><span id="lon">0</span></div>
+      <div class="row"><span class="lbl">CAMÉRA</span><span id="cam">EXTÉRIEURE</span></div>
+      <div id="warp" class="tag hidden">TEMPS ACCÉLÉRÉ ×900</div>
+    </div>
+
+    <div id="globebox">
+      <canvas id="globe"></canvas>
+    </div>
+
+    <div id="help" class="panel">
+      <b>↑↓ / Z S</b> tangage · <b>←→ / Q D</b> roulis · <b>A E</b> lacet · <b>Maj / Ctrl</b> poussée ·
+      <b>B</b> freins · <b>Espace</b> post-combustion · <b>C</b> caméra · <b>T</b> temps · <b>P</b> pause · <b>H</b> aide
+    </div>
+  </div>
+
+  <!-- Pause -->
+  <div id="pause" class="hidden">PAUSE<small>Appuyez sur P pour reprendre</small></div>
+
+  <!-- Écran d'accueil -->
+  <div id="home">
+    <div class="card">
+      <div class="eyebrow">SIMULATEUR DE VOL PLANÉTAIRE</div>
+      <h1>AÉROSPHÈRE</h1>
+      <p class="sub">Une planète entière de 6 371 km de rayon, générée par le code. Du rase-mottes à l’orbite, sans coupure.</p>
+      <div class="keys">
+        <div><kbd>↑</kbd><kbd>↓</kbd> ou <kbd>Z</kbd><kbd>S</kbd></div><div>Tangage — <b>↓ / S pour cabrer</b> (tirer le manche)</div>
+        <div><kbd>←</kbd><kbd>→</kbd> ou <kbd>Q</kbd><kbd>D</kbd></div><div>Roulis</div>
+        <div><kbd>A</kbd><kbd>E</kbd></div><div>Lacet (palonnier)</div>
+        <div><kbd>Maj</kbd> / <kbd>Ctrl</kbd></div><div>Poussée + / − <span class="dim">(ou R / F)</span></div>
+        <div><kbd>B</kbd></div><div>Freins (aérofreins et roues)</div>
+        <div><kbd>Espace</kbd></div><div>Post-combustion orbitale (maintenir pour grimper jusqu’à l’espace)</div>
+        <div><kbd>C</kbd></div><div>Caméra : extérieure → cockpit → orbite libre</div>
+        <div><kbd>T</kbd></div><div>Accélérer le temps (course du soleil, jour / nuit)</div>
+        <div><kbd>P</kbd> · <kbd>H</kbd></div><div>Pause · afficher / masquer l’aide</div>
+        <div><kbd>R</kbd> ou <kbd>Entrée</kbd></div><div>Réapparaître en vol après un crash</div>
+        <div>Souris</div><div>Glisser : regarder autour / orbiter · Molette : zoom · Clic droit (ou Maj) + glisser en orbite : incliner le regard</div>
+      </div>
+      <p class="dim note">Claviers QWERTY : les mêmes touches physiques (W A S D, Q E).</p>
+      <button id="startbtn" disabled>Chargement…</button>
+      <div id="loading">Génération de la planète…</div>
+    </div>
+  </div>
+
+  <!-- Écran de crash -->
+  <div id="crash" class="hidden">
+    <div class="card small">
+      <h2>CRASH</h2>
+      <p id="crashreason"></p>
+      <p id="crashstats" class="dim"></p>
+      <button id="respawnbtn">Réapparaître en vol</button>
+      <p class="dim note">ou appuyez sur <kbd>R</kbd> / <kbd>Entrée</kbd></p>
+    </div>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
